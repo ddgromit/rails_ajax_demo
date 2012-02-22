@@ -1,8 +1,6 @@
 AjaxDemo::Application.routes.draw do
   get "jqueries/index"
 
-  resources :messages
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
