@@ -1,23 +1,34 @@
-function addToList(content) {
-	$("#created-messages").append("<li>" + content + "</li>");
+function addToList(message) {
+	var el = $("<li style='display:none'>" + message + "</li>");
+	$("#new_messages").append(el);
+	$(el).show('fast');
 }
 
-// Get's executed when the page loads
 $(function() {
-	$("#add-message-button").click(function() {
+	var url = '/messages.json'
+
+	$.get(url,function(data) {
+		$.each(data, function(i, message) {
+			var content = message.content;
+			addToList(content);
+		});
+	});
+
+	$("#add").click(function() {
 		var content = $("#message-content").val();
+		if (content == "") {
+			alert('thats required!');
+			return;
+		}
 
 		var url = '/messages.json';
 		var params = {
 			'message[content]':content
 		};
-		var callback = function(new_object) {
-			var content = new_object.content;
-			var id = new_object.id;
-			addToList(id);
-
-		};
-
-		$.post(url,params,callback);
+		$.post(url, params, function(message) {
+			var content = message.content;
+			addToList(content);
+		});
 	});
+
 });
